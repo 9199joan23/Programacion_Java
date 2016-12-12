@@ -8,10 +8,13 @@ package controlllerFactura;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import modelo.Client;
 import modelo.Conexion;
 import modelo.Producte;
@@ -24,24 +27,62 @@ public class ControllerFactura {
 
     public ControllerFactura() {
     }
-public void crearClinete(Client C){
-  //1. conectarme
+
+    public DefaultTableModel mostrarProducto() {
+        DefaultTableModel muestra = null;
+
+        //1. conectarme
         Conexion conectar = new Conexion();
         Connection cn = conectar.conec();
+
+        String sql = "Select * From tbl_producte";
+        Statement st = null;
+        String vectorProducto[] = new String[4];
+        String vectorProducto1[] = new String[4];
+        vectorProducto1[0] = "pro_id";
+        vectorProducto1[1] = "pro_nombre";
+        vectorProducto1[2] = "pro_precio";
+        vectorProducto1[3] = "pro_stock";
         
+        muestra=new DefaultTableModel(null, vectorProducto1);
+//String[] vectorProducto; De otra manera definir el vector
+
         try {
-            CallableStatement  clientenuevo = cn.prepareCall("{call spcrearCliente(?,?)}");
-            
-            
-            clientenuevo.setString(1,"david");
-            clientenuevo.setString(2,"65556565957");
-            
-            
-            
-        } catch (SQLException ex) {
-           JOptionPane.showMessageDialog(null, "Conexion erronea"); 
+
+            st = cn.createStatement();
+
+            ResultSet rs = st.executeQuery(sql);
+
+            while (rs.next()) {
+
+                vectorProducto[0] = String.valueOf(rs.getInt("pro_id"));
+                vectorProducto[1] = rs.getString("pro_nombre");
+                vectorProducto[2] = String.valueOf(rs.getInt("pro_precio"));
+                vectorProducto[3] = String.valueOf(rs.getInt("pro_stock"));
+                muestra.addRow(vectorProducto);
+            }
+        } catch (Exception e) {
         }
-}
+
+        return muestra;
+    }
+
+    public void crearClinete(Client C) {
+        //1. conectarme
+        Conexion conectar = new Conexion();
+        Connection cn = conectar.conec();
+
+        try {
+            CallableStatement clientenuevo = cn.prepareCall("{call spcrearCliente(?,?)}");
+
+            clientenuevo.setString(1, "david");
+            clientenuevo.setString(2, "65556565957");
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Conexion erronea");
+        }
+    }
+
     public void addProducteClient(Producte p, Client c) {
         //1. conectarme
         Conexion conectar = new Conexion();
@@ -50,7 +91,7 @@ public void crearClinete(Client C){
         String sql1 = "INSERT INTO tbl_producte (pro_nombre, pro_precio ,pro_stock) VALUES (?,?,?)";
 
         //Creamos la segunda sentencia
-        String sql2 = "INSER INTO tbl_client (cli_nom, cli_nif) VALUES (?,?)";
+        String sql2 = "INSERT INTO tbl_client (cli_nom, cli_nif) VALUES (?,?)";
 
         PreparedStatement pst1 = null;
         PreparedStatement pst2 = null;
