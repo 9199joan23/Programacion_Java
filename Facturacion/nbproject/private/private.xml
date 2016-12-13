@@ -3,15 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/9199.joan23/Documents/NetBeansProjects/Facturacion/src/modelo/Conexion.java</file>
-            <file>file:/C:/Users/9199.joan23/Documents/NetBeansProjects/Facturacion/src/modelo/Client.java</file>
-            <file>file:/C:/Users/9199.joan23/Documents/NetBeansProjects/Facturacion/src/modelo/Factura.java</file>
             <file>file:/C:/Users/9199.joan23/Documents/NetBeansProjects/Facturacion/src/vista/VistaProducto.java</file>
-            <file>file:/C:/Users/9199.joan23/Documents/NetBeansProjects/Facturacion/src/vista/VistaCliente.java</file>
             <file>file:/C:/Users/9199.joan23/Documents/NetBeansProjects/Facturacion/src/modelo/Producte.java</file>
-            <file>file:/C:/Users/9199.joan23/Documents/NetBeansProjects/Facturacion/src/modelo/LineaFactura.java</file>
+            <file>file:/C:/Users/9199.joan23/Documents/NetBeansProjects/Facturacion/src/vista/vistaInicio.java</file>
             <file>file:/C:/Users/9199.joan23/Documents/NetBeansProjects/Facturacion/src/controlllerFactura/ControllerFactura.java</file>
-            <file>file:/C:/Users/9199.joan23/Documents/NetBeansProjects/Facturacion/src/vista/vistaCompleta.java</file>
         </group>
     </open-files>
 </project-private>

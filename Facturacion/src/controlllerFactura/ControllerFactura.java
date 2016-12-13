@@ -91,7 +91,7 @@ public class ControllerFactura {
         String sql1 = "INSERT INTO tbl_producte (pro_nombre, pro_precio ,pro_stock) VALUES (?,?,?)";
 
         //Creamos la segunda sentencia
-        String sql2 = "INSERT INTO tbl_client (cli_nom, cli_nif) VALUES (?,?)";
+        String sql2 = "INSER INTO tbl_client (cli_nom, cli_nif) VALUES (?,?)";
 
         PreparedStatement pst1 = null;
         PreparedStatement pst2 = null;
@@ -112,6 +112,8 @@ public class ControllerFactura {
 
             pst1.executeUpdate();
             pst2.executeUpdate();
+            
+            cn.commit();
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Conexion erronea");
