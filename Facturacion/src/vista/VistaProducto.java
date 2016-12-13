@@ -171,6 +171,11 @@ public class VistaProducto extends javax.swing.JInternalFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -238,6 +243,21 @@ public class VistaProducto extends javax.swing.JInternalFrame {
     private void jbGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbGuardarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jbGuardarActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+        
+        //System.out.println("Hola");
+        
+        //Modificamos el boton guardar para que pase a modificar
+        this.jbGuardar.setText("Modificar");
+        //Marcar la fila selecionado al presionar click
+        int fila = jTable1.rowAtPoint(evt.getPoint());
+        //Pasa el parametro
+        jtNombre.setText(String.valueOf(jTable1.getValueAt(fila, 1)));
+        
+        //Desahibilitar los botones de añadir y eliminar
+    }//GEN-LAST:event_jTable1MouseClicked
 
     /**
      * @param args the command line arguments
