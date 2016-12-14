@@ -195,10 +195,10 @@ public class vistaCompleta extends javax.swing.JFrame {
        
         String nombre = this.jtNombre1.getText();
         double precio = Double.parseDouble(this.jtPrecio.getText());
-        double stock = Double.parseDouble(this.jtStock.getText());
+        int stock = Integer.parseInt(this.jtStock.getText());
         Producte p = new Producte(nombre, precio, stock);
          
-        producte.addProducteClient(p, c);
+        //producte.addProducteClient(p, c);
 
 
     }//GEN-LAST:event_jbAddActionPerformed

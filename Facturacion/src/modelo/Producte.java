@@ -13,19 +13,30 @@ public class Producte {
     
       private int pro_id;
     private String pro_nombre;
+
+    public int getPro_categoria() {
+        return pro_categoria;
+    }
+
+    public void setPro_categoria(int pro_categoria) {
+        this.pro_categoria = pro_categoria;
+    }
     private double pro_precio;
-     private double pro_stok;
+     private int pro_stok;
+     private int pro_categoria;
 
     public Producte() {
     }
 
-    public Producte(String pro_nombre, double pro_precio, double pro_stok) {
+    public Producte(String pro_nombre, double pro_precio, int pro_categoria) {
         this.pro_nombre = pro_nombre;
         this.pro_precio = pro_precio;
-        this.pro_stok = pro_stok;
+        this.pro_categoria = pro_categoria;
     }
 
-    public Producte(int pro_id, String pro_nombre, double pro_precio, double pro_stok) {
+    
+
+    public Producte(int pro_id, String pro_nombre, double pro_precio, int pro_stok) {
         this.pro_id = pro_id;
         this.pro_nombre = pro_nombre;
         this.pro_precio = pro_precio;
@@ -60,7 +71,7 @@ public class Producte {
         this.pro_precio = pro_precio;
     }
 
-    public void setPro_stok(double pro_stok) {
+    public void setPro_stok(int pro_stok) {
         this.pro_stok = pro_stok;
     }
    

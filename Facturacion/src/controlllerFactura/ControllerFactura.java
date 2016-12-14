@@ -5,6 +5,7 @@
  */
 package controlllerFactura;
 
+import java.awt.HeadlessException;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,11 +14,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import modelo.Categoria;
 import modelo.Client;
 import modelo.Conexion;
 import modelo.Producte;
+import modelo.Stock;
 
 /**
  *
@@ -27,7 +32,14 @@ public class ControllerFactura {
 
     public ControllerFactura() {
     }
-
+public static boolean isNumeric(String cadena){
+	try {
+		Integer.parseInt(cadena);
+		return true;
+	} catch (NumberFormatException nfe){
+		return false;
+	}
+}
     public DefaultTableModel mostrarProducto() {
         DefaultTableModel muestra = null;
 
@@ -61,10 +73,44 @@ public class ControllerFactura {
                 vectorProducto[3] = String.valueOf(rs.getInt("pro_stock"));
                 muestra.addRow(vectorProducto);
             }
+            cn.close();
         } catch (Exception e) {
         }
 
         return muestra;
+     
+    }
+    //https://www.youtube.com/watch?v=rPLed0P6Ytc
+    public void llenarCombo(JComboBox box){
+        DefaultComboBoxModel value;
+        Conexion conectar = new Conexion();
+        Connection cn = conectar.conec();
+
+        String sql = "Select * From tbl_categoria";
+        Statement st = null;
+        ResultSet rs=null;
+
+        try {
+            st = cn.createStatement();
+             //JOptionPane.showMessageDialog(null, "Conexion viento en popa2");
+            rs = st.executeQuery(sql);
+             // JOptionPane.showMessageDialog(null, "Conexion viento en popa2");
+            value=new DefaultComboBoxModel();
+            box.setModel(value);
+            while (rs.next()) {
+            
+             value.addElement(new Categoria(rs.getInt("idcategoria"),rs.getString("name")));
+            
+            }
+            cn.close();
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(null, "Conexion erronea");
+          
+        }
+
+          
+
+    
     }
 
     public void crearClinete(Client C) {
@@ -83,44 +129,72 @@ public class ControllerFactura {
         }
     }
 
-    public void addProducteClient(Producte p, Client c) {
+    public void addProducteStock(Producte p, Stock s) {
         //1. conectarme
         Conexion conectar = new Conexion();
         Connection cn = conectar.conec();
         //creamos la primera consulta sql
-        String sql1 = "INSERT INTO tbl_producte (pro_nombre, pro_precio ,pro_stock) VALUES (?,?,?)";
+       
 
         //Creamos la segunda sentencia
-        String sql2 = "INSER INTO tbl_client (cli_nom, cli_nif) VALUES (?,?)";
-
+        String sql1 = "INSERT INTO tbl_stock (quantitat, quantitatmax,quantitatmin) VALUES (?,?,?)";
+       
+        String sql2="select distinct last_insert_id() from  tbl_stock";
+        
+        String sql3 = "INSERT INTO tbl_producte (pro_nombre, pro_precio ,pro_stock,pro_categoria) VALUES (?,?,?,?)";
         PreparedStatement pst1 = null;
+        Statement st=null;
         PreparedStatement pst2 = null;
+        ResultSet rs=null;
         try {
             //solo hace una sentencia sql (false) hace dos sentencias (true)
+            //http://blog.rolandopalermo.com/2012/10/transactions-jdbc.html
             cn.setAutoCommit(false);
-
             pst1 = cn.prepareStatement(sql1);
 
-            pst1.setString(1, p.getPro_nombre());
-            pst1.setDouble(2, p.getPro_precio());
-            pst1.setDouble(3, p.getPro_stok());
-
-            pst2 = cn.prepareStatement(sql2);
-
-            pst2.setString(1, c.getCli_nom());
-            pst2.setString(2, c.getCli_nif());
-
+            pst1.setInt(1, s.getStock_actual());
+            pst1.setInt(2, s.getStock_max());
+            pst1.setInt(3, s.getStock_min());
             pst1.executeUpdate();
-            pst2.executeUpdate();
-            
-            cn.commit();
+            JOptionPane.showMessageDialog(null, "viento en popa");
+            //recuperamos el ultimo registro
+            st = cn.createStatement(); 
+            rs = st.executeQuery(sql2);
+            int idst=0;
+            while(rs.next()){
+            idst=rs.getInt(1);
+            }
+           //String idst= rs.toString();
+            JOptionPane.showMessageDialog(null, idst);
+           // System.out.println(idstock);
+           
+            pst2 = cn.prepareStatement(sql3);
 
-        } catch (Exception e) {
+           
+            
+            pst2.setString(1,p.getPro_nombre());
+            pst2.setDouble(2, p.getPro_precio());
+            pst2.setInt(3,idst );
+            pst2.setInt(4, p.getPro_categoria());
+            //pst1.executeUpdate();
+            JOptionPane.showMessageDialog(null, "vientoen popa34");
+            pst2.executeUpdate();
+            JOptionPane.showMessageDialog(null, "vientoen popa34");
+           
+            cn.commit();
+           // cn.close();
+            //pst1.close();
+            //pst2.close();
+            //rs.close();
+
+        } catch (SQLException | HeadlessException e) {
             JOptionPane.showMessageDialog(null, "Conexion erronea");
             try {
                 cn.rollback();
             } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "No se puede deshacer");
             }
+            
         }
     }
 
